@@ -5,10 +5,19 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: Kaltsit
       MONGO_INITDB_ROOT_PASSWORD: RhodesIsland
+    volumes:
+      - ./home/ubuntu/data:/data/db
+    networks:
+      - ascalon
   backend:
     image: mansmooth/ascalon:latest
     restart: unless-stopped
     environment:
-      - database_uri=mongodb://Kaltsit:RhodesIsland@34.205.167.81:27017
+      - database_uri=mongodb://Kaltsit:RhodesIsland@172.18.0.2:27017
     ports:
       - 8000:3001
+    networks:
+      - ascalon
+networks:
+  ascalon:
+    driver: bridge
