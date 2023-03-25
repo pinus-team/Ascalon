@@ -9,6 +9,6 @@ services:
     image: mansmooth/ascalon:latest
     restart: unless-stopped
     environment:
-      - database_uri=mongodb://Kaltsit:RhodesIsland@host1[:port1]
+      - database_uri=mongodb://Kaltsit:RhodesIsland@34.205.167.81:27017
     ports:
       - 8000:3001
