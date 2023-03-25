@@ -1,0 +1,14 @@
+services:
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Kaltsit
+      MONGO_INITDB_ROOT_PASSWORD: RhodesIsland
+  backend:
+    image: mansmooth/ascalon:latest
+    restart: unless-stopped
+    environment:
+      - database_uri=mongodb://Kaltsit:RhodesIsland@host1[:port1]
+    ports:
+      - 8000:3001
