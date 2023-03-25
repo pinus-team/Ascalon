@@ -5,6 +5,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: Kaltsit
       MONGO_INITDB_ROOT_PASSWORD: RhodesIsland
+    ports:
+      - 27017:27017
     volumes:
       - ./home/ubuntu/data:/data/db
     networks:
