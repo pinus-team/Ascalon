@@ -32,6 +32,7 @@ jobs:
                   push: true
                   tags: ${{ secrets.DOCKER_USERNAME }}/ascalon:latest
     deploy:
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v3
