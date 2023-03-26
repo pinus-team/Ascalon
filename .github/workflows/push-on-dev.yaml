@@ -37,5 +37,5 @@ jobs:
                   cp docker-compose.yaml ascalon/docker-compose.yaml
                   cd ascalon
                   docker-compose -H tcp://${{ secrets.HOST_SERVER }} down
-                  # docker-compose -H tcp://${{ secrets.HOST_SERVER }} pull
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} pull
                   docker-compose -H tcp://${{ secrets.HOST_SERVER }} up -d
