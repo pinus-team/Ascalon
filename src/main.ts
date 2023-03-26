@@ -1,56 +1,38 @@
 import express from "express";
-import { Document, MongoError } from "mongodb";
-import { database } from "./services/database";
-import { bodyToDish, IDish } from "./types/dish";
+
+import dish_endpoints from "./routes/dishes";
+import addon_endpoints from "./routes/addons";
 
 const app = express();
 const dish_router = express.Router();
+const addon_router = express.Router();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-dish_router.get("/dishes", (req, res) => {
-	database
-		.collection("menu")
-		.find()
-		.toArray()
-		.then((docs: Document[]) => {
-			res.status(200).send(docs);
-		})
-		.catch((err: MongoError) => {
-			res.status(500).send(err);
-		});
-});
-
-dish_router.post("/add", (req, res) => {
-	const dish: IDish = bodyToDish(req.body);
-	database
-		.collection("menu")
-		.updateOne({ title: dish.title }, { $set: dish }, { upsert: true })
-		.then((result) => {
-			res.status(200).send(result);
-		})
-		.catch((err: MongoError) => {
-			res.status(500);
-			console.error(err);
-		});
-});
-
-dish_router.post("/remove", (req, res) => {
-	const dish: IDish = bodyToDish(req.body);
-	database
-		.collection("menu")
-		.deleteOne({ title: dish.title })
-		.then((result) => {
-			res.status(200).send(result);
-		})
-		.catch((err: MongoError) => {
-			res.status(500);
-			console.error(err);
-		});
-});
+for (const endpoint of dish_endpoints) {
+	switch (endpoint.method) {
+		case "get":
+			dish_router.get(endpoint.path, endpoint.handler);
+			break;
+		case "post":
+			dish_router.post(endpoint.path, endpoint.handler);
+			break;
+	}
+}
+for (const endpoint of addon_endpoints) {
+	switch (endpoint.method) {
+		case "get":
+			addon_router.get(endpoint.path, endpoint.handler);
+			break;
+		case "post":
+			addon_router.post(endpoint.path, endpoint.handler);
+			break;
+	}
+}
 
 app.use("/dish", dish_router);
+app.use("/addon", addon_router);
 
 app.listen(3001, () => {
 	console.log("Server is running on port 3001");
