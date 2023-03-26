@@ -1,5 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { config } from "../config";
+import config from "../config";
 
 const client = new MongoClient(config.database_uri, {
 	serverApi: ServerApiVersion.v1,
@@ -7,7 +7,7 @@ const client = new MongoClient(config.database_uri, {
 
 client.connect();
 
-export const database = client.db("pinus-sylvestris");
+export const database = client.db(config.database_name);
 addValidation();
 
 export function close() {
