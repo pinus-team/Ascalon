@@ -4,6 +4,12 @@ on:
     push:
         branches:
             - develop
+
+env:
+    MONGO_USER: ${{ secrets.MONGO_USER }}
+    MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+    DB_NAME: ${{ secrets.DB_NAME }}
+
 jobs:
     docker:
         runs-on: ubuntu-latest
