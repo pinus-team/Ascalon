@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import { Document, MongoError } from "mongodb";
 import { database } from "../services/database";
 import { bodyToDish, IDish } from "../types/dish";
-import { dish_join_pipeline } from "../services/aggregation";
+import { dish_cat_join_pipeline, dish_join_pipeline } from "../services/aggregation";
 
 export default [
 	{
 		path: "/",
 		method: "get",
 		handler: getDishes,
+	},
+	{
+		path: "/:id",
+		method: "get",
+		handler: getDishesCat,
 	},
 	{
 		path: "/add",
@@ -26,6 +31,19 @@ function getDishes(req: Request, res: Response) {
 	database
 		.collection("menu")
 		.aggregate(dish_join_pipeline)
+		.toArray()
+		.then((docs: Document[]) => {
+			res.status(200).send(docs);
+		})
+		.catch((err: MongoError) => {
+			res.status(500).send(err);
+		});
+}
+
+function getDishesCat(req: Request, res: Response) {
+	database
+		.collection("menu")
+		.aggregate(dish_cat_join_pipeline(Number(req.params.id)))
 		.toArray()
 		.then((docs: Document[]) => {
 			res.status(200).send(docs);
