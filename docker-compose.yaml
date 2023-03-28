@@ -20,6 +20,6 @@ services:
             - database_password=${MONGO_PASSWORD}
             - jwt_secret=${JWT_SECRET}
         ports:
-            - 8000:3001
+            - 8000:8000
         links:
             - db

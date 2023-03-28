@@ -47,6 +47,6 @@ app.use("/dish", dish_router);
 app.use("/addon", addon_router);
 app.use("/auth", auth_router);
 
-app.listen(3001, () => {
-	console.log("Server is running on port 3001");
+app.listen(8000, () => {
+	console.log("Server is running on port 8000");
 });
