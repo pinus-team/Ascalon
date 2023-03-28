@@ -9,6 +9,7 @@ env:
     MONGO_USER: ${{ secrets.MONGO_USER }}
     MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
     DB_NAME: ${{ secrets.DB_NAME }}
+    JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
 jobs:
     push-image:
