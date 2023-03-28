@@ -18,6 +18,7 @@ services:
             - database_name=${DB_NAME}
             - database_user=${MONGO_USER}
             - database_password=${MONGO_PASSWORD}
+            - jwt_secret=${JWT_SECRET}
         ports:
             - 8000:3001
         links:

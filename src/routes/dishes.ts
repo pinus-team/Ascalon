@@ -48,8 +48,7 @@ function addDish(req: Request, res: Response) {
 			res.status(200).send(result);
 		})
 		.catch((err: MongoError) => {
-			res.status(500);
-			console.error(err);
+			res.status(500).send(err);
 		});
 }
 
@@ -62,7 +61,6 @@ function removeDish(req: Request, res: Response) {
 			res.status(200).send(result);
 		})
 		.catch((err: MongoError) => {
-			res.status(500);
-			console.error(err);
+			res.status(500).send(err);
 		});
 }
