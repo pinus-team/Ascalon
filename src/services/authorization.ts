@@ -2,8 +2,10 @@ import bcrypt from "bcrypt";
 import config from "../config";
 import jwt from "jsonwebtoken";
 import { IUser } from "../types/user";
+import { ObjectId } from "mongodb";
 
 interface IJWTPayload {
+	user_id: ObjectId
 	user: String;
 	role: Number;
 }
@@ -21,6 +23,7 @@ export const checkPassword = async (
 
 const generatePayloadFromUser = (user: IUser): IJWTPayload => {
 	return {
+		user_id: user._id? user._id : new ObjectId(),
 		user: user.username,
 		role: Number(user.role),
 	};

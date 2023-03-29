@@ -8,7 +8,15 @@ export function addValidation(database: Db) {
 		validator: {
 			$jsonSchema: {
 				bsonType: "object",
-				required: ["username", "password", "email", "first_name", "last_name", "phone_number", "role"],
+				required: [
+					"username",
+					"password",
+					"email",
+					"first_name",
+					"last_name",
+					"phone_number",
+					"role",
+				],
 				properties: {
 					username: {
 						bsonType: "string",
@@ -39,6 +47,42 @@ export function addValidation(database: Db) {
 						minimum: 0,
 						maximum: 2,
 						description: "must be an int and is required",
+					},
+					address: {
+						bsonType: "object",
+						required: ["address", "city", "province", "zip_code"],
+						properties: {
+							latitude: {
+								bsonType: "double",
+								minimum: -90,
+								maximum: 90,
+								description:
+									"latitude must be double and between -90, 90",
+							},
+							longitude: {
+								bsonType: "double",
+								minimum: -180,
+								maximum: 180,
+								description:
+									"longitude must be double and between -180, 180",
+							},
+							address: {
+								bsonType: "string",
+								description: "required and must be string",
+							},
+							city: {
+								bsonType: "string",
+								description: "required and must be string",
+							},
+							province: {
+								bsonType: "string",
+								description: "required and must be string",
+							},
+							zip_code: {
+								bsonType: "string",
+								description: "required and must be string",
+							},
+						},
 					},
 				},
 			},

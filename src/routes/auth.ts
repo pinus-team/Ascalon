@@ -2,7 +2,11 @@ import { MongoError } from "mongodb";
 import { database } from "../services/database";
 import { bodyToLoginData, bodyToUser, ILoginData, IUser } from "../types/user";
 import { Request, Response } from "express";
-import { checkPassword, generateJWT, hashPassword } from "../services/authorization";
+import {
+	checkPassword,
+	generateJWT,
+	hashPassword,
+} from "../services/authorization";
 import config from "../config";
 
 export default [
@@ -53,6 +57,7 @@ async function registerHandler(req: Request, res: Response) {
 			res.status(200).send(result);
 		})
 		.catch((err: MongoError) => {
-			res.status(500).send("Username already exists.");
+			console.log(err.errorLabels);
+			res.status(500).send(err.message);
 		});
 }
