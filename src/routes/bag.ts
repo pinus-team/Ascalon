@@ -18,7 +18,7 @@ export default [
 ];
 
 function getBagId(req: Request, res: Response) {
-	database.collection("bag");
+	res.status(200).send("getBagId");
 }
 
 function postBagId(req: Request, res: Response) {

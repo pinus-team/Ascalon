@@ -8,14 +8,16 @@ export interface IBag {
 
 export interface IBagItem {
 	dish_id: ObjectId;
-	addons: ObjectId[];
+	addons?: ObjectId[];
 	quantity: Int32;
 }
 
 export function bodyToBagItem(body: any): IBagItem {
-	return {
+	let obj: IBagItem = {
 		dish_id: new ObjectId(body.dish_id),
-		addons: body.addons.map((addon: any) => new ObjectId(addon._id)),
 		quantity: new Int32(body.quantity),
 	};
+	if (body.addons)
+		obj.addons = body.addons.map((addon: any) => new ObjectId(addon));
+	return obj;
 }
