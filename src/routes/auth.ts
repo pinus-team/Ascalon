@@ -38,6 +38,7 @@ function loginHandler(req: Request, res: Response) {
 			res.status(500).send(err);
 		});
 }
+
 async function registerHandler(req: Request, res: Response) {
 	const user: IUser = bodyToUser(req.body);
 	if (!config.email_regex.test(user.email)) {
