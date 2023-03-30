@@ -174,3 +174,121 @@ export const order_join_pipeline_with_id = (id: ObjectId) => [
 		},
 	},
 ];
+
+export const best_selling_dishes_by_today = [
+	{
+		$match: {
+			$and: [
+				{
+					$expr: {
+						$eq: ["$status", 2],
+					},
+				},
+				{
+					$expr: {
+						$eq: [
+							{
+								$dayOfYear: "$timestamp",
+							},
+							{
+								$dayOfYear: new Date(),
+							},
+						],
+					},
+				},
+			],
+		},
+	},
+	{
+		$unwind: {
+			path: "$items",
+		},
+	},
+	{
+		$group: {
+			_id: "$items.dish_id",
+			title: {
+				$first: "$items.dish.title",
+			},
+			count: {
+				$sum: "$items.quantity",
+			},
+		},
+	},
+	{
+		$sort: {
+			count: -1,
+			_id: 1,
+		},
+	},
+];
+
+export const best_selling_dishes_by_all_time = [
+	{
+		$match: {
+			$expr: {
+				$eq: ["$status", 2],
+			},
+		},
+	},
+	{
+		$unwind: {
+			path: "$items",
+		},
+	},
+	{
+		$group: {
+			_id: "$items.dish_id",
+			title: {
+				$first: "$items.dish.title",
+			},
+			count: {
+				$sum: "$items.quantity",
+			},
+		},
+	},
+	{
+		$sort: {
+			count: -1,
+			_id: 1,
+		},
+	},
+];
+
+export const income_by_day = [
+	{
+		$match: {
+			status: 2,
+		},
+	},
+	{
+		$group: {
+			_id: {
+				$add: [
+					{
+						$dayOfYear: "$timestamp",
+					},
+					{
+						$multiply: [
+							400,
+							{
+								$year: "$timestamp",
+							},
+						],
+					},
+				],
+			},
+			date: {
+				$first: "$timestamp",
+			},
+			income: {
+				$sum: "$totalPrice",
+			},
+		},
+	},
+	{
+		$sort: {
+			_id: -1,
+		},
+	},
+];
