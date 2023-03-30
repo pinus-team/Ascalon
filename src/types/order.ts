@@ -20,6 +20,7 @@ export interface IOrderItem {
 	dish: IDish;
 	addons?: IAddon[];
 	price: Double;
+    note: string;
 }
 
 export function bodyToOrder(body: any): IOrder {
@@ -42,5 +43,6 @@ export function bodyToOrderItem(body: any): IOrderItem {
 		dish: bodyToDish(body.dish),
 		addons: body.addons.map((addon: any) => bodyToAddon(addon)),
 		price: new Double(body.price),
+        note: body.note
 	};
 }

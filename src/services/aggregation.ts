@@ -133,3 +133,44 @@ export const bag_join_pipeline = (user_id: ObjectId) => [
 		},
 	},
 ];
+
+export const order_join_pipeline = [
+	{
+		$lookup: {
+			from: "users",
+			localField: "user_id",
+			foreignField: "_id",
+			as: "user_data",
+		},
+	},
+	{
+		$set: {
+			user_data: {
+				$arrayElemAt: ["$user_data", 0],
+			},
+		},
+	},
+];
+
+export const order_join_pipeline_with_id = (id: ObjectId) => [
+	{
+		$match: {
+			_id: id,
+		},
+	},
+	{
+		$lookup: {
+			from: "users",
+			localField: "user_id",
+			foreignField: "_id",
+			as: "user_data",
+		},
+	},
+	{
+		$set: {
+			user_data: {
+				$arrayElemAt: ["$user_data", 0],
+			},
+		},
+	},
+];

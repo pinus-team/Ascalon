@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
+import {
+	order_join_pipeline,
+	order_join_pipeline_with_id,
+} from "../services/aggregation";
 import { database } from "../services/database";
 import { IBag } from "../types/bags";
 import { bodyToOrder, IOrder } from "../types/order";
@@ -34,7 +38,7 @@ export default [
 function getOrder(req: Request, res: Response) {
 	database
 		.collection<IOrder>("order")
-		.find()
+		.aggregate(order_join_pipeline)
 		.toArray()
 		.then((docs) => {
 			res.status(200).send(docs);
@@ -47,10 +51,11 @@ function getOrder(req: Request, res: Response) {
 function getOrderSingular(req: Request, res: Response) {
 	database
 		.collection<IOrder>("order")
-		.findOne({ _id: new ObjectId(req.params.id) })
+		.aggregate(order_join_pipeline_with_id(new ObjectId(req.params.id)))
+		.toArray()
 		.then((doc) => {
 			if (doc) {
-				res.status(200).send(doc);
+				res.status(200).send(doc[0]);
 			} else {
 				res.status(404).send("Not found");
 			}

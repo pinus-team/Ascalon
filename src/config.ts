@@ -9,6 +9,6 @@ export default {
 	email_regex: new RegExp(
 		String.raw`([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])`
 	),
-	jwt_secret: process.env.jwt_secret? process.env.jwt_secret: '',
+	jwt_secret: process.env.jwt_secret ? process.env.jwt_secret : "",
 	jwt_expiresIn: 3600,
 };
