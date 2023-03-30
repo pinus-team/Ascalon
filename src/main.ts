@@ -6,6 +6,7 @@ import auth_endpoints from "./routes/auth";
 import news_endpoints from "./routes/news";
 import user_endpoints from "./routes/user";
 import bag_endpoints from "./routes/bag";
+import order_endpoints from "./routes/order";
 
 const app = express();
 const dish_router = express.Router();
@@ -14,6 +15,7 @@ const auth_router = express.Router();
 const news_router = express.Router();
 const user_router = express.Router();
 const bag_router = express.Router();
+const order_router = express.Router();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -78,6 +80,16 @@ for (const endpoint of bag_endpoints) {
 			break;
 	}
 }
+for (const endpoint of order_endpoints) {
+	switch (endpoint.method) {
+		case "get":
+			order_router.get(endpoint.path, endpoint.handler);
+			break;
+		case "post":
+			order_router.post(endpoint.path, endpoint.handler);
+			break;
+	}
+}
 
 app.use("/dish", dish_router);
 app.use("/addon", addon_router);
@@ -85,6 +97,7 @@ app.use("/auth", auth_router);
 app.use("/news", news_router);
 app.use("/user", user_router);
 app.use("/bag", bag_router);
+app.use("/order", order_router);
 
 app.listen(8000, () => {
 	console.log("Server is running on port 8000");
