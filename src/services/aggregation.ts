@@ -284,6 +284,9 @@ export const income_by_day = [
 			income: {
 				$sum: "$totalPrice",
 			},
+			count: {
+				$sum: 1,
+			},
 		},
 	},
 	{
