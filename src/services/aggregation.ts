@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export const dish_join_pipeline = [
 	{
 		$set: {
@@ -69,6 +71,65 @@ export const dish_cat_join_pipeline = (cat: Number) => [
 			localField: "addons",
 			foreignField: "_id",
 			as: "addons",
+		},
+	},
+];
+
+export const bag_join_pipeline = (user_id: ObjectId) => [
+	{
+		$match: {
+			user_id: user_id,
+		},
+	},
+	{
+		$lookup: {
+			from: "menu",
+			localField: "dish_id",
+			foreignField: "_id",
+			as: "dish",
+		},
+	},
+	{
+		$lookup: {
+			from: "addon",
+			localField: "addons",
+			foreignField: "_id",
+			as: "addons",
+		},
+	},
+	{
+		$set: {
+			dish: {
+				$arrayElemAt: ["$dish", 0],
+			},
+		},
+	},
+	{
+		$set: {
+			price: {
+				$multiply: [
+					{
+						$sum: [
+							{
+								$reduce: {
+									input: "$addons",
+									initialValue: 0,
+									in: {
+										$sum: ["$$value", "$$this.price"],
+									},
+								},
+							},
+							"$dish.price",
+						],
+					},
+					"$quantity",
+				],
+			},
+		},
+	},
+	{
+		$sort: {
+			_id: 1,
 		},
 	},
 ];
