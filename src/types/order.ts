@@ -1,9 +1,10 @@
-import { Double, Int32, ObjectId } from "mongodb";
+import { Double, Int32, Long, ObjectId, Timestamp } from "mongodb";
 import { bodyToAddon, IAddon } from "./addon";
 import { bodyToDish, IDish } from "./dish";
 
 export interface IOrder {
 	_id?: ObjectId;
+	timestamp: Date;
 	user_id: ObjectId;
 	delivery_method: string;
 	payment_method: string;
@@ -23,6 +24,7 @@ export interface IOrderItem {
 
 export function bodyToOrder(body: any): IOrder {
 	return {
+		timestamp: new Date(),
 		user_id: new ObjectId(body.user_id),
 		delivery_method: body.deliver_method,
 		payment_method: body.payment_method,

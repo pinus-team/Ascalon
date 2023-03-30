@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import { database } from "../services/database";
+import { IBag } from "../types/bags";
 import { bodyToOrder, IOrder } from "../types/order";
 
 export default [
@@ -58,6 +59,7 @@ function getOrderSingular(req: Request, res: Response) {
 			res.status(500).send(err);
 		});
 }
+
 function getOrderUser(req: Request, res: Response) {
 	database
 		.collection<IOrder>("order")
@@ -77,7 +79,12 @@ function getOrderUser(req: Request, res: Response) {
 
 function addOrder(req: Request, res: Response) {
 	const order: IOrder = bodyToOrder(req.body);
-	console.log(order);
+	database
+		.collection<IBag>("bag")
+		.deleteMany({ user_id: order.user_id })
+		.catch((error) => {
+			console.error(error);
+		});
 	database
 		.collection<IOrder>("order")
 		.insertOne(order)
