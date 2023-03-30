@@ -18,6 +18,12 @@ export default [
 	},
 	{
 		name: "order",
+		path: "/user/:user_id",
+		method: "get",
+		handler: getOrderUser,
+	},
+	{
+		name: "order",
 		path: "/",
 		method: "post",
 		handler: addOrder,
@@ -41,6 +47,22 @@ function getOrderSingular(req: Request, res: Response) {
 	database
 		.collection<IOrder>("order")
 		.findOne({ _id: new ObjectId(req.params.id) })
+		.then((doc) => {
+			if (doc) {
+				res.status(200).send(doc);
+			} else {
+				res.status(404).send("Not found");
+			}
+		})
+		.catch((err) => {
+			res.status(500).send(err);
+		});
+}
+function getOrderUser(req: Request, res: Response) {
+	database
+		.collection<IOrder>("order")
+		.find({ user_id: new ObjectId(req.params.user_id) })
+		.toArray()
 		.then((doc) => {
 			if (doc) {
 				res.status(200).send(doc);
