@@ -20,7 +20,15 @@ export interface IOrderItem {
 	dish: IDish;
 	addons?: IAddon[];
 	price: Double;
-    note: string;
+	note: string;
+}
+
+export interface IOrderUpdateForm {
+	status?: Int32;
+	delivery_method?: string;
+	payment_method?: string;
+	items?: IOrderItem[];
+	totalPrice?: Double;
 }
 
 export function bodyToOrder(body: any): IOrder {
@@ -43,6 +51,17 @@ export function bodyToOrderItem(body: any): IOrderItem {
 		dish: bodyToDish(body.dish),
 		addons: body.addons.map((addon: any) => bodyToAddon(addon)),
 		price: new Double(body.price),
-        note: body.note
+		note: body.note,
 	};
+}
+
+export function bodyToOrderUpdateForm(body: any): IOrderUpdateForm {
+	let obj: IOrderUpdateForm = {};
+	if (body.status) obj.status = new Int32(body.status);
+	if (body.delivery_method) obj.delivery_method = body.delivery_method;
+	if (body.payment_method) obj.payment_method = body.payment_method;
+	if (body.items)
+		obj.items = body.items.map((item: any) => bodyToOrderItem(item));
+	if (body.totalPrice) obj.totalPrice = new Double(body.totalPrice);
+	return obj;
 }

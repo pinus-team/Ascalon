@@ -6,7 +6,7 @@ import {
 } from "../services/aggregation";
 import { database } from "../services/database";
 import { IBag } from "../types/bags";
-import { bodyToOrder, IOrder } from "../types/order";
+import { bodyToOrder, bodyToOrderUpdateForm, IOrder, IOrderUpdateForm } from "../types/order";
 
 export default [
 	{
@@ -26,6 +26,12 @@ export default [
 		path: "/user/:user_id",
 		method: "get",
 		handler: getOrderUser,
+	},
+	{
+		name: "order",
+		path: "/:id",
+		method: "post",
+		handler: updateOrder,
 	},
 	{
 		name: "order",
@@ -99,4 +105,17 @@ function addOrder(req: Request, res: Response) {
 		.catch((err) => {
 			res.status(500).send(err);
 		});
+}
+
+function updateOrder(req: Request, res: Response) {
+    const order: IOrderUpdateForm = bodyToOrderUpdateForm(req.body);
+    database
+        .collection<IOrder>("order")
+        .updateOne({ _id: new ObjectId(req.params.id) }, { $set: order })
+        .then((result) => {
+            res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
 }
