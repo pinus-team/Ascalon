@@ -1,0 +1,53 @@
+name: Deploy on push [Development]
+run-name: Deploy to development by @${{ github.actor }}
+on:
+    push:
+        branches:
+            - main
+
+env:
+    MONGO_USER: ${{ secrets.MONGO_USER }}
+    MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+    DB_NAME: ${{ secrets.DB_NAME_PROD }}
+    JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+jobs:
+    push-image:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Setup QEMU
+              uses: docker/setup-qemu-action@v2
+            - name: Setup Docker Buildx
+              uses: docker/setup-buildx-action@v2
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_TOKEN }}
+            - name: Build and Push
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ secrets.DOCKER_USERNAME }}/ascalon:prod-latest
+    deploy:
+        needs: push-image
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_TOKEN }}
+            - name: Docker compose run
+              run: |
+                  mkdir ascalon-prod
+                  cp docker-compose-prod.yaml ascalon-prod/docker-compose.yaml
+                  cd ascalon-prod
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} down
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} pull
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} up -d --no-recreate
