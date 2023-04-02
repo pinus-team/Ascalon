@@ -10,7 +10,7 @@ services:
         volumes:
             - ./home/ubuntu/data:/data/db
     backend:
-        image: mansmooth/ascalon:latest
+        image: mansmooth/ascalon:prod-latest
         restart: unless-stopped
         environment:
             - database_host=db
