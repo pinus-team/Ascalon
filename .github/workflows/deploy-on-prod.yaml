@@ -1,5 +1,5 @@
-name: Deploy on push [Development]
-run-name: Deploy to development by @${{ github.actor }}
+name: Deploy on push [Production]
+run-name: Deploy to production by @${{ github.actor }}
 on:
     push:
         branches:
