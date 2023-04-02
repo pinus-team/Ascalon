@@ -6,7 +6,7 @@ services:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
         ports:
-            - 27017:27017
+            - 27018:27017
         volumes:
             - ./home/ubuntu/data:/data/db
     backend:
@@ -14,7 +14,7 @@ services:
         restart: unless-stopped
         environment:
             - database_host=db
-            - database_port=27017
+            - database_port=27018
             - database_name=${DB_NAME}
             - database_user=${MONGO_USER}
             - database_password=${MONGO_PASSWORD}
