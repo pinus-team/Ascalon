@@ -48,6 +48,6 @@ jobs:
                   mkdir ascalon-prod
                   cp docker-compose-prod.yaml ascalon-prod/docker-compose.yaml
                   cd ascalon-prod
-                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} down
-                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} pull
-                  docker-compose -H tcp://${{ secrets.HOST_SERVER }} up -d --no-recreate
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER_PROD }} down
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER_PROD }} pull
+                  docker-compose -H tcp://${{ secrets.HOST_SERVER_PROD }} up -d --no-recreate
