@@ -57,7 +57,6 @@ async function registerHandler(req: Request, res: Response) {
 			res.status(200).send(result);
 		})
 		.catch((err: MongoError) => {
-			console.log(err.errorLabels);
 			res.status(500).send(err.message);
 		});
 }
